@@ -24,9 +24,12 @@ class Controller(object):
         self.max_steer_angle = kwargs.get('max_steer_angle')
         self.max_lat_accel = kwargs.get('max_lat_accel')
         
-        kp = 0.3
-        kd = 0.01
-        ki = 0.1
+#         kp = 0.3
+#         kd = 0.01
+#         ki = 0.1
+        kp = 0.6
+        ki = 0.001
+        kd = 0.4
         mn = 0
         mx = 0.2
         self.throttle_controller = PID(kp, kd, ki, mn, mx)
@@ -44,14 +47,14 @@ class Controller(object):
         # max torque (1.0 throttle) and  max brake torque (deceleration lmt)
         self.max_acc_torque = total_vehicle_mass * self.max_acceleration * self.wheel_radius #567
         self.max_brake_torque = total_vehicle_mass * abs(self.decel_limit) * self.wheel_radius #2095
-        rospy.loginfo("-------------- initializing Controller  ..max brake torque {}".format(self.max_brake_torque) )
+       # rospy.loginfo("-------------- initializing Controller  ..max brake torque {}".format(self.max_brake_torque) )
         self.last_time = rospy.get_time()
         
       
 
     def control(self, desired_linear_vel, desired_angular_vel, current_linear_vel, dbw_enabled):
         # TODO: Change the arg, kwarg list to suit your needs
-        rospy.loginfo("control desired velocity {}".format(desired_linear_vel ))
+        #rospy.logwarn("control desired velocity {}".format(desired_linear_vel ))
         if not dbw_enabled:
             self.throttle_controller.reset()
             return 0., 0., 0.
@@ -85,6 +88,6 @@ class Controller(object):
             brake = abs(decel) * self.vehicle_mass * self.wheel_radius  # Torque N*m
 
         #brake = self.brake_lpf.filt(brake)
-        rospy.loginfo("control  throttle {} brake {} steering {}".format(throttle, brake, steering ))
+        #rospy.logwarn("control  throttle {} brake {} steering {}".format(throttle, brake, steering ))
 
         return throttle, brake, steering
