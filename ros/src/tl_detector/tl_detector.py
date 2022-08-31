@@ -168,6 +168,7 @@ class TLDetector(object):
 
         if clight:
             state = self.get_light_state(clight)
+            #rospy.logwarn("Closest light line_idx {}", format(line_idx))
             return line_idx, state
 
         return -1, TrafficLight.UNKNOWN
